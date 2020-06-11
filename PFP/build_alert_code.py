@@ -143,7 +143,7 @@ if __name__ == "__main__":
   ##                   Generate patterns                  ##
   ##########################################################
   K = 10000
-  patterns_days = read_pattern('results_patterns.csv')
+  patterns_days = read_pattern('results/patterns.csv')
   longterm_alertcode = build_longterm_alert_code(patterns_days, K)
   medium_alertcode = build_mediumterm_alert_code(patterns_days, K)
   shortterm_alertcode = build_shortterm_alert_code(patterns_days, K)

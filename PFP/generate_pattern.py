@@ -265,22 +265,35 @@ dataset.columns = ['datetime', 'step', 'x', 'y', 'id', 'length']
 
 # define time milestones
 start_time = 201507010000
+days_of_months = 31 # July and August have 31 days
 offset = 400
 end_date = 2400
-num_milestones = 120
+num_milestones = 372
+milestone_length = 10000 # 1 day
 
 milestones = []
 for i in range(num_milestones):
+  # new day
   if (start_time % 10000) == end_date:
     start_time -= end_date
     start_time += 10000
-  milestone = [start_time, start_time + 10000]
+  
+  # new month
+  if ((start_time // milestone_length) % 100) == 32:
+    start_time -=  320000
+    start_time += 1010000    
+    
+  end_time = start_time + milestone_length
+  if ((end_time // milestone_length) % 100) == 32:
+    end_time -=  320000
+    end_time += 1010000
+    
+  milestone = [start_time, end_time]
   milestones.append(milestone)
   start_time += offset
-print(milestones)
 
 ######## INPUT ###############
-filepath = 'results_patterns.csv'
+filepath = 'results/patterns.csv'
 outputFile = open(filepath, 'w')
 
 MAX_PATTERNS = 0
