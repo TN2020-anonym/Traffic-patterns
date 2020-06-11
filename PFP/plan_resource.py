@@ -30,7 +30,7 @@ if __name__ == "__main__":
       opacity=.7
     ).add_to(m)
     
-  m.save('plan_resources_1.html')
+  m.save('results/plan_resources_1.html')
   
   # example 2: This is to draw traffic-congested situations for a long-term pattern
   print('start example 2')  
@@ -54,7 +54,7 @@ if __name__ == "__main__":
       opacity=.7
     ).add_to(m)
     
-  m.save('plan_resources_2.html')
+  m.save('results/plan_resources_2.html')
   
   
   

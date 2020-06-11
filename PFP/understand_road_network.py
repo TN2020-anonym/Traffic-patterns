@@ -15,7 +15,7 @@ if __name__ == "__main__":
   m = createBaseMap()
   for i in range(len(locations)):
     location = locations[i]
-    path = './figures/heavy.png'
+    path = './base_figures/heavy.png'
     img = Image.open(path)
     img.save(path)
     location = loc2list(location)
@@ -25,7 +25,7 @@ if __name__ == "__main__":
       opacity=.3
     ).add_to(m)
         
-  m.save('road_networks.html')
+  m.save('results/road_networks.html')
   
   
   

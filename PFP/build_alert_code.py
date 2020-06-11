@@ -116,7 +116,7 @@ def generate_alertcode_examples():
   m = createBaseMap()
   for i in range(len(locations)):
     location = locations[i]
-    path = './figures/heavy.png'
+    path = './base_figures/heavy.png'
     img = Image.open(path)
     img.save(path)
     location = loc2list(location)
@@ -128,7 +128,7 @@ def generate_alertcode_examples():
 
   for i in range(len(inattentive)):
     location = inattentive[i] 
-    path = './figures/light.png'
+    path = './base_figures/light.png'
     img = Image.open(path)
     folium.raster_layers.ImageOverlay(
       image=path, 
@@ -136,7 +136,7 @@ def generate_alertcode_examples():
       opacity=.5
     ).add_to(m)
         
-  m.save('alertcodes.html')
+  m.save('results/alertcodes.html')
   
 if __name__ == "__main__":
   ##########################################################
