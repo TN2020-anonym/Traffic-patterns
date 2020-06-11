@@ -5,6 +5,7 @@
 """
 
 import pickle
+from map_utils import *
 
 def read_pattern(result_patterns_file):
   result_patterns_file = open(result_patterns_file, 'r')
@@ -13,9 +14,6 @@ def read_pattern(result_patterns_file):
   patterns_day = []
   days_id = []
   for line in lines:
-    if '--' in line:
-      continue
-      
     if ';' not in line:
       days_id.append(line.split(',')[1])
       print(line.split(',')[1])
@@ -36,7 +34,7 @@ def read_pattern(result_patterns_file):
   
 def get_topk_patterns(collected_patterns, k):
   order = {k: v for k, v in sorted(collected_patterns.items(), key=lambda item: item[1], reverse=True)}
-  return list(order.keys())[:k]
+  return list(order.keys())[:min(k, len(order))]
   
 # build alert codes for long-/medium-/short-term patterns respectively
 # patterns_days: patterns extracted
@@ -45,7 +43,6 @@ def build_longterm_alert_code(patterns_days, k=10):
   collected_patterns = {}
   steps = 6
   for start in range(len(patterns_days)-6):
-    print ('at', start)
     patterns_day0 = patterns_days[start]
     for pattern in patterns_day0:
       appear = True
@@ -106,8 +103,46 @@ def build_shortterm_alert_code(patterns_days, k=10):
   
   return get_topk_patterns(collected_patterns, k)
   
+# This is to generate alert codes presented in the paper
+def generate_alertcode_examples():
+  long_patterns = ['30083;30084', '81163;82163', '82163;83163']
+  medium_patterns = ['29083;30083;30084', '97145;98144;98145']
+  short_patterns = ['97146;98144', '29083;30083']
+  
+  # Take the interested pattern defined in the lists above, and put it to "patterns" variable
+  patterns = '30083;30084'
+  inattentive = get_inattentive(patterns)
+  locations = patterns.split(';')
+  m = createBaseMap()
+  for i in range(len(locations)):
+    location = locations[i]
+    path = './figures/heavy.png'
+    img = Image.open(path)
+    img.save(path)
+    location = loc2list(location)
+    folium.raster_layers.ImageOverlay(
+      image=path, 
+      bounds=[relativeloc2Coordinate(location), relativeloc2Coordinate([x + 1 for x in location])],
+      opacity=.5
+    ).add_to(m)
+
+  for i in range(len(inattentive)):
+    location = inattentive[i] 
+    path = './figures/light.png'
+    img = Image.open(path)
+    folium.raster_layers.ImageOverlay(
+      image=path, 
+      bounds=[relativeloc2Coordinate(location), relativeloc2Coordinate([x + 1 for x in location])],
+      opacity=.5
+    ).add_to(m)
+        
+  m.save('alertcodes.html')
+  
 if __name__ == "__main__":
-  K = 10
+  ##########################################################
+  ##                   Generate patterns                  ##
+  ##########################################################
+  K = 10000
   patterns_days = read_pattern('results_patterns.csv')
   longterm_alertcode = build_longterm_alert_code(patterns_days, K)
   medium_alertcode = build_mediumterm_alert_code(patterns_days, K)
@@ -116,3 +151,8 @@ if __name__ == "__main__":
   print(longterm_alertcode)
   print(medium_alertcode)
   print(shortterm_alertcode)
+  
+  ##########################################################
+  ##             Draw examples of patterns                ##
+  ##########################################################
+  generate_alertcode_examples()

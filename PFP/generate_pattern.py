@@ -289,9 +289,8 @@ for stage in range(len(milestones)):
   # extract data based on milestones
   print('EXTRACT')
   milestone = milestones[stage]
-  data = dataset.loc[(dataset['datetime'] >= milestone[0]) & (dataset['datetime'] <= milestone[1])]
-  data = data.loc[(data['x'] >= 40) & (data['x'] <= 70)]
-  data = data.loc[(data['y'] >= 200) & (data['y'] <= 230)]
+  data = dataset.loc[(dataset['datetime'] >= milestone[0]) & (dataset['datetime'] <= milestone[1])]  
+  data = data.loc[data['length'] > 200]
   data = data.loc[data['step'] == 0]
   data = data.reset_index(drop=True)
   print(data.head())
@@ -305,9 +304,9 @@ for stage in range(len(milestones)):
   totalTransactions = len(transactions)
 
   # all are in percentage of the number of transactions (x100)
-  minSup = .90 # threshold to consider a pattern is frequent
-  maxPeriodicities = [12/totalTransactions] # 12 * 5-minute interval = 1 hour
-  minNumberOfPeriodicOccurrences = .85 # threshold to consider a pattern is periodic-frequent
+  minSup = .95 # threshold to consider a pattern is frequent
+  maxPeriodicities = [6/totalTransactions] # 12 * 5-minute interval = 1 hour
+  minNumberOfPeriodicOccurrences = .90 # threshold to consider a pattern is periodic-frequent
 
   ###### extract patterns #######
   for maxPeriodicity in maxPeriodicities:
